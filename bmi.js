@@ -30,6 +30,18 @@
 
 const LINE = "-----------------------------------------------------";
 let bmr, bmi, normal, danger;
+let firstName, lastName, age, size, weight;
+firstName = prompt("Please enter your first name");
+lastName = prompt("Please enter your last name");
+age = Number(prompt("Please enter your age"));
+size = Number(prompt("Please enter your size(in m)").replaceAll(/[.,m]/g, ""));
+weight = prompt("Please enter your weight(in kg)").replaceAll(/[kg]/g, "");
+if(weight.search(/[.,]/g) != -1){
+    weight = Number(weight.slice(0, weight.search(/[.,]/g))) +
+        Number(weight.slice(weight.search(/[.,]/g) + 1) * 0.1 ** (weight.length - weight.search(/[.,]/g) - 1));
+}else{
+    weight = Number(weight);
+}
 
 /**
  * Formulas:
@@ -49,8 +61,33 @@ let bmr, bmi, normal, danger;
  * Be careful. Users make typos. Make sure that you have a valid answer before moving on.
  */
 
+let gender;
+gender = prompt("For a correct basal metabolic rate calculation please enter your gender. Press m for male or f for female");
+while(gender.toLowerCase() != "m" && gender.toLowerCase() != "f"){
+    prompt("You made an invalid input. Press m for male or f for female");
+}
 // TODO: To calculate the bmi, use the given formula with all the input you have collected.
+
+bmi = (10000 * weight) / size**2;
+
+if(gender == "m"){
+    bmr = 66 + 14 * weight + 5 * size - 7 * age;
+}else{
+    bmr = 665 + 10 * weight + 2 * size - 6 * age;
+}
+
 // TODO: Once you have the bmi, determine whether or not the weight is normal and if the condition is dangerous.
+
+if(bmi < 16 || bmi > 30){
+    danger = true;
+    normal = false;
+}else if(bmi >  25|| bmi < 18){
+    danger = false;
+    normal = false;
+}else {
+    danger = false;
+    normal = true;
+}
 
 /*
  * TODO: Create the correct output from all your data. Make sure to stick to the promised format! NO EXCEPTIONS!
@@ -71,8 +108,17 @@ let bmr, bmi, normal, danger;
  *   -----------------------------------------------------
  */
 
-console.log(LINE); // Logs the dashed-line.
-
+console.log(LINE);// Logs the dashed-line.
+console.log("Name:		          " + lastName.toUpperCase() + ", " + firstName);
+console.log(LINE);
+console.log("Age:                  " + age + " Years");
+console.log("Height:               " + ((size - size % 100) / 100) + "," + size % 100 + "m");
+console.log("Weight:               " + Math.round(weight) + " kg");
+console.log("Basal Metabolic Rate: " + Math.round(bmr) + " kcal");
+console.log("Body Mass Index:      " + bmi)
+normal ? console.log("Normal Weight:        Yes") : console.log("Normal Weight:        No")
+danger ? console.log("Danger:               Yes") : console.log("Danger:               No")
+console.log(LINE)
 /*
  * TODO: Make sure to TEST YOUR SOFTWARE! Does it work, when People are smaller than 1 meter? Or taller than 2?
  * Tip: An 18-Year old Woman, sized 160cm with 60 kg should have a BMR of 1467 kcal and a BMI of 23.4375.
